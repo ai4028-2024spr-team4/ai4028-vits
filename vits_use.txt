@@ -1,0 +1,12 @@
+1. env1.yaml으로 conda 환경 설치
+conda env create -f env1.yaml
+2. 설치된 conda 환경 실행 (vits_test)
+conda activate vits_test
+source activate vits_test // 가끔 리눅스 커널에서 conda 환경 실행 안먹을때.
+3. VITS-fast-fine-tuning 폴더로 이동
+cd ./VIST-fast_fine-tuning
+4. step5.py 실행
+python step5.py.
+
+추가.
+실제 실행 파일은 inference.py.
