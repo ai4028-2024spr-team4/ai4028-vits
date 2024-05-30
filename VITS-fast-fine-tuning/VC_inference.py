@@ -9,6 +9,7 @@ import utils
 from models import SynthesizerTrn
 import gradio as gr
 import librosa
+import soundfile
 import webbrowser
 
 from text import text_to_sequence, _clean_text
@@ -37,10 +38,10 @@ def get_text(text, hps, is_symbol):
     return text_norm
 
 def create_tts_fn(model, hps, speaker_ids):
-    def tts_fn(text, speaker, language, speed):
+    def tts_fn(text, speaker=0, language="한국어", speed=1):
         if language is not None:
             text = language_marks[language] + text + language_marks[language]
-        speaker_id = speaker_ids[speaker]
+        speaker_id = 0#speaker_ids[speaker]
         stn_tst = get_text(text, hps, False)
         with no_grad():
             x_tst = stn_tst.unsqueeze(0).to(device)
@@ -84,16 +85,18 @@ def create_vc_fn(model, hps, speaker_ids):
         return "Success", (hps.data.sampling_rate, audio)
 
     return vc_fn
+
+
+
 if __name__ == "__main__":
+    # 모델 초기화 부분.
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_dir", default="./G_latest.pth", help="directory to your fine-tuned model")
     parser.add_argument("--config_dir", default="./finetune_speaker.json", help="directory to your model config file")
-    parser.add_argument("--share", default=False, help="make link public (used in colab)")
+    #parser.add_argument("--share", default=False, help="make link public (used in colab)")
 
     args = parser.parse_args()
     hps = utils.get_hparams_from_file(args.config_dir)
-
-
     net_g = SynthesizerTrn(
         len(hps.symbols),
         hps.data.filter_length // 2 + 1,
@@ -102,6 +105,29 @@ if __name__ == "__main__":
         **hps.model).to(device)
     _ = net_g.eval()
 
+
+    _ = utils.load_checkpoint(args.model_dir, net_g, None)
+    speaker_ids = hps.speakers
+    speakers = list(hps.speakers.keys())
+
+
+    # tts 함수 생성
+    tts_fn = create_tts_fn(net_g, hps, speaker_ids)
+
+    # tts 함수 실행 예제
+    text_output, audio_output = tts_fn("안녕하세요. 전기전자컴퓨터공학과 김종원 교수입니다.")
+
+    # tts 결과 저장 예제
+    #print(audio_output)
+    soundfile.write("test.wav", 
+                    audio_output[1], 
+                    audio_output[0], 
+                    format='WAV')
+    
+    
+    
+    
+    """
     _ = utils.load_checkpoint(args.model_dir, net_g, None)
     speaker_ids = hps.speakers
     speakers = list(hps.speakers.keys())
@@ -127,10 +153,13 @@ if __name__ == "__main__":
                     btn.click(tts_fn,
                               inputs=[textbox, char_dropdown, language_dropdown, duration_slider,],
                               outputs=[text_output, audio_output])
+                    #btn.click(tts_fn,
+                    #          inputs=["안녕하세요. 전기전자컴퓨터공학부 김종원 교수입니다.", char_dropdown, language_dropdown, duration_slider,],
+                    #          outputs=[text_output, audio_output])
         with gr.Tab("Voice Conversion"):
-            gr.Markdown("""
-                            录制或上传声音，并选择要转换的音色。
-            """)
+            gr.Markdown("
+                            #录制或上传声音，并选择要转换的音色。
+            ")
             with gr.Column():
                 record_audio = gr.Audio(label="record your voice", source="microphone")
                 upload_audio = gr.Audio(label="or upload audio here", source="upload")
@@ -144,4 +173,4 @@ if __name__ == "__main__":
                       outputs=[message_box, converted_audio])
     webbrowser.open("http://127.0.0.1:7860")
     app.launch(share=args.share)
-
+    """
