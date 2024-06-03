@@ -43,7 +43,7 @@ jobs:
       - name: Check out infra-ops repository
         uses: actions/checkout@v2
         with:
-          repository: "keiburu-Tai/infra-ops"
+          repository: "ai4028-2024spr-team4/ai4028-infra"
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           fetch-depth: 0
 
