@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install Flask kiwipiepy langdetect torch
+RUN pip install Flask kiwipiepy langdetect torch librosa
 
 CMD ['step1.sh']
 
