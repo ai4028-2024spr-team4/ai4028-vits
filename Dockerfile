@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install Flask
+RUN pip install Flask kiwipiepy langdetect -y
 
 CMD ['step1.sh']
 
