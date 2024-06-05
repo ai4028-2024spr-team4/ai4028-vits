@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install Flask kiwipiepy langdetect torch librosa regex gradio unidecode
+RUN pip install Flask kiwipiepy langdetect torch librosa regex gradio unidecode olefile pyopenjtalk
 
 CMD ['step1.sh']
 
