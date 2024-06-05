@@ -47,7 +47,7 @@ def get_text(text, hps, is_symbol):
     return text_norm
 
 def create_tts_fn(model, hps, speaker_ids):
-    def tts_fn(text, speaker=0, language="한국어", speed=1):
+    def tts_fn(text, speaker=0, language="한국어", speed=0.8):
         if language is not None:
             text = language_marks[language] + text + language_marks[language]
         speaker_id = 0#speaker_ids[speaker]
