@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install Flask kiwipiepy langdetect torch librosa regex
+RUN pip install Flask kiwipiepy langdetect torch librosa regex gradio
 
 CMD ['step1.sh']
 
