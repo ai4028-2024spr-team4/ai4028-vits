@@ -1,4 +1,7 @@
 Original github  [中文文档请点击这里](https://github.com/Plachtaa/VITS-fast-fine-tuning/blob/main/README_ZH.md)
+korean colab version : https://colab.research.google.com/drive/1i7TLiaPxcOlBoUiSnARP9MTEBpydmBiG?usp=sharing
+
+
 # VITS Fast Fine-tuning
 This repo will guide you to add your own character voices, or even your own voice, into existing VITS TTS model
 to make it able to do the following tasks in less than 1 hour:  
